@@ -1,4 +1,3 @@
-#Author Steven Seung
 #turnip tracker and queue bot version 1.0
 #4/19/2020
 
