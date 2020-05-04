@@ -1,7 +1,7 @@
 # discord-turnipbot
 A rudimentary discord bot to keep track of turnip prices and manage island guests in Animal Crossing: New Horizons
 
-##requirements 
+## requirements 
 Must have python 3.5.3 or higher installed.
 Must have discord.py and pytz installed from pip
 pip install discord.py
