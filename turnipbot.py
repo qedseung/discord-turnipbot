@@ -17,10 +17,12 @@ class Status:
     dates = {}
     dodo = None
     start = False
+    owner = None
 
 #just a few global variables
 client = commands.Bot(command_prefix="!")
 client.remove_command("help")
+#channels to allow bot commands in 
 whitelist_chan = ("stalk-market-prices", "market", "island-is-open", "general")
 restricted = "restricted channel"
 stat = Status()
@@ -51,6 +53,15 @@ async def wait(ctx):
         n = len(line)
         await ctx.send("there are {} users in line".format(n))
 
+@client.command()
+async def owner(ctx):
+    if stat.start and stat.owner:
+        await ctx.send("The line for {} is active.".format(stat.owner))
+    elif stat.owner and not stat.start:
+        await ctx.send("the line for {} is paused.".format(stat.owner))
+    else:
+        await ctx.send("no line started")
+
 #join sender to line
 @client.command()
 async def joinq(ctx):
@@ -58,7 +69,10 @@ async def joinq(ctx):
         await ctx.send("you're already in line")
     else:
         line.append(ctx.author)
-        await ctx.send("you are #{} in line".format(len(line)))
+        if stat.owner:
+            await ctx.send("you are #{} in {}'s line".format(len(line), stat.owner))
+        else:
+            await ctx.send("you are #{} in line".format(len(line)))
 
 #leave sender from line
 @client.command()
@@ -75,6 +89,7 @@ async def startq(ctx, msg):
     if type(ctx.channel) == discord.channel.DMChannel:
         if len(str(msg)) == 5:
             stat.dodo = msg
+            stat.owner = ctx.author
             stat.start = True
             print(stat.dodo)
             print(ctx.author)
@@ -179,15 +194,14 @@ type '!joinq' to add yourself to the line.
 type '!wait' to get your wait time.
 type '!stopq' to stop/pause the line.
 type '!leaveq' to leave the line.
+type '!owner' to see who started the line
 Time format 'YYYY-MM-DDTHH:mm:ss+tz.
 """
-
     await ctx.send(body)
 
 # debug command  
 # @client.command()
 # async def _test(ctx):
-#     print("Task:",process_line.is_running())
 #     print("Dodo:",stat.dodo)
 #     print("Line:",len(line))
 #     print("Strt:",stat.start)
