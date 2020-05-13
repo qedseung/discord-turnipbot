@@ -18,6 +18,17 @@ class Status:
     dodo = None
     start = False
     owner = None
+    reset = 720
+    count = 0
+    #method to reset status
+    def reset(self):
+        self.maximum = 0
+        self.minimum = 0
+        self.min_users.clear()
+        self.max_users.clear()
+        self.data.clear()
+        self.dates.clear()
+        self.count = 0
 
 #just a few global variables
 client = commands.Bot(command_prefix="!")
@@ -40,8 +51,14 @@ async def process_line():
         user = line.popleft()
         print(len(line))
         await user.send("Your turn. DODO code is {}".format(stat.dodo))
-    elif len(line)==0:
-        print(pytz.utc.localize(dt.datetime.utcnow()).astimezone(pytz.timezone("America/Los_Angeles")).isoformat())
+    # elif len(line)==0:
+    #     print(pytz.utc.localize(dt.datetime.utcnow()).astimezone(pytz.timezone("America/Los_Angeles")).isoformat())
+
+    #reset every 24 hours
+    stat.count += 1    
+    if stat.count > 720:        
+        stat.reset()
+
 
 #check wait time
 @client.command()
