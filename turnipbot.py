@@ -18,17 +18,16 @@ class Status:
     dodo = None
     start = False
     owner = None
-    reset = 720
-    count = 0
+    countdown = 720
     #method to reset status
     def reset(self):
         self.maximum = 0
-        self.minimum = 0
+        self.minimum = -1
         self.min_users.clear()
         self.max_users.clear()
         self.data.clear()
         self.dates.clear()
-        self.count = 0
+        self.countdown = 720
 
 #just a few global variables
 client = commands.Bot(command_prefix="!")
@@ -55,8 +54,8 @@ async def process_line():
     #     print(pytz.utc.localize(dt.datetime.utcnow()).astimezone(pytz.timezone("America/Los_Angeles")).isoformat())
 
     #reset every 24 hours
-    stat.count += 1    
-    if stat.count > 720:        
+    stat.countdown -= 1    
+    if stat.countdown < 1:        
         stat.reset()
 
 
